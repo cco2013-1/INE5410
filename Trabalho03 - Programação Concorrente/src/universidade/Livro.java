@@ -9,7 +9,11 @@ public class Livro {
 		this.tempoLeitura = tempoLeitura;	
 	}
 	
-	public synchronized void ler() {
-		
+	public synchronized int ler() {
+		return this.tempoLeitura;
+	}
+	
+	public int getIdentificador() {
+		return this.identificador;
 	}
 }

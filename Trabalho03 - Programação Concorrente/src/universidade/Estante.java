@@ -15,6 +15,6 @@ public class Estante {
 	 }
  }
  public Livro pegarLivro(int posicao) {
-	 return null;
+	 return livros[posicao];
  }
 }
