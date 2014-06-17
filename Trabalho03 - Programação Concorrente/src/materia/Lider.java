@@ -7,7 +7,7 @@ public class Lider extends Aluno {
 	private int numeroLidos;
 	private int posicaoDoAtual;
 	private Livro pego;
-	
+
 	public Lider(Grupo grupo, Estante estante) { 
 		super(grupo); 
 		this.estante = estante;
@@ -26,8 +26,8 @@ public class Lider extends Aluno {
 				if(!(lidos[posicaoDoAtual])){ //se já não leu
 					pego = this.pegar(posicaoDoAtual); //pega o livro na posição sorteada
 				}
-				
-				
+
+
 			}while(lidos[posicaoDoAtual]|| pego==null); //se ele já leu ou não pegou livro algum
 			this.grupo.modificarAtual(pego); //atualiza o livro do grupo
 			grupo.pegarAtual().ler(); //le o livro

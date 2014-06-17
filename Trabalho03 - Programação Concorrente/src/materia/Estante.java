@@ -36,4 +36,12 @@ public class Estante {
  public int numeroDeLivros() {
 	 return this.livros.length;
  }
+ 
+ public String toString() {
+	 String auxiliar = "";
+	 for(int i = 0; i<this.livros.length; i++) {
+		 auxiliar+=this.livros[i]+"  ";
+	 }
+	 return auxiliar;
+ }
 }

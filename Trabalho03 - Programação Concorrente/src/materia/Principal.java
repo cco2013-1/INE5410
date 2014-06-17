@@ -3,17 +3,24 @@ package materia;
 public class Principal {
 	public static final int unidadeTempo = 10;
 	public static void main(String[] args) {
-		int equipesFinalizadas = analise(true, 8);
-		int numeroAnalizado = 9; //numero de livros na estante para que todos consigam entregar 
+		int analise = analise(true, 8);
+		int numeroAnalizado = 8; //numero de livros na estante para que todos consigam entregar 
+		int equipesFinalizadas = 0;
+		while(equipesFinalizadas != 15){
+			numeroAnalizado++;
+			equipesFinalizadas = analise(false, numeroAnalizado);
+		}
+		System.out.println("Foram necessários "+numeroAnalizado+" livros para que todos terminem em 200 unidades de tempo");
 	}
-	
+
 	public static int analise(boolean resultados, int quantidadeLivros) {
+		System.out.println("\n==== TESTE COM "+quantidadeLivros+" LIVROS====\n");
 		Grupo[] grupos = new Grupo[15];
 		Estante estante = new Estante(quantidadeLivros);
-		for(int i = 0; i<grupos.length; i++){
+		for(int i = 0; i<grupos.length; i++){  //criando os grupos
 			grupos[i] = new Grupo(estante, 4);
 		}
-		
+
 		try{
 			Thread.sleep(200*unidadeTempo); //esperando até o prazo do trabalho ser estourado
 		}catch(InterruptedException e){
@@ -25,9 +32,36 @@ public class Principal {
 				finalizados++;
 			}
 		}
-		if(!resultados) return finalizados; //se não quiser mostrar os resultador retorna isso
-		System.out.println("Após 200 unidades de tempo "+finalizados+" conseguiram entregar o trabalho");
-			return 0;
+		int tempoExtra = 0;
+		if(resultados){ 
+			System.out.println("Após 200 unidades de tempo "+finalizados+" conseguiram entregar o trabalho\n");
+			finalizados = 0;
+			for(int i = 0; i<grupos.length; i++){
+				if(grupos[i].trabalhoFinalizado()){ // se o grupo terminou
+					finalizados++;
+				}
+			}
+			tempoExtra++;
+		}
+		tempoExtra+=200;
+		System.out.println("Foram necessários "+tempoExtra+" unidades de tempo para que todos terminem seu trabalho\n");
+		while(finalizados != 15) { //espera até todos finalizarem
+			finalizados = 0;
+			for(int i = 0; i<grupos.length; i++){
+				if(grupos[i].trabalhoFinalizado()){ // se o grupo terminou
+					finalizados++;
+				}
+			}
+		}
+		for(int i = 0; i< estante.numeroDeLivros(); i++) { //mostrando quantas vezes cada livro foi lido
+			try{
+				System.out.println("O livro "+i+" foi livro "+estante.pegarLivro(i).vezesQueFoiLido()+ " vezes");
+			}catch(NullPointerException e) {
+
+			}
+
+		}
+		return finalizados;
 	}
 
 }
