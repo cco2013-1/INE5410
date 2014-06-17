@@ -10,7 +10,7 @@ public class Principal {
 			numeroAnalizado++;
 			equipesFinalizadas = analise(false, numeroAnalizado);
 		}
-		System.out.println("Foram necessários "+numeroAnalizado+" livros para que todos terminem em 200 unidades de tempo");
+		System.out.println("\nForam necessários "+numeroAnalizado+" livros para que todos terminem em 200 unidades de tempo");
 	}
 
 	public static int analise(boolean resultados, int quantidadeLivros) {
@@ -35,24 +35,30 @@ public class Principal {
 		int tempoExtra = 0;
 		if(resultados){ 
 			System.out.println("Após 200 unidades de tempo "+finalizados+" conseguiram entregar o trabalho\n");
-			finalizados = 0;
-			for(int i = 0; i<grupos.length; i++){
-				if(grupos[i].trabalhoFinalizado()){ // se o grupo terminou
-					finalizados++;
+			while(finalizados != 15){
+				finalizados = 0;
+				try{
+					Thread.sleep((tempoExtra++)*unidadeTempo);
+				}catch(InterruptedException e){
+					System.out.println("Ferrou joão 2");
+				}
+				
+				for(int i = 0; i<grupos.length; i++){
+					if(grupos[i].trabalhoFinalizado()){ // se o grupo terminou
+						finalizados++;
+					}
 				}
 			}
-			tempoExtra++;
+
+			tempoExtra+=200;
+			System.out.println("Foram necessários "+tempoExtra+" unidades de tempo para que todos terminem seu trabalho\n");
 		}
-		tempoExtra+=200;
-		System.out.println("Foram necessários "+tempoExtra+" unidades de tempo para que todos terminem seu trabalho\n");
-		while(finalizados != 15) { //espera até todos finalizarem
-			finalizados = 0;
-			for(int i = 0; i<grupos.length; i++){
-				if(grupos[i].trabalhoFinalizado()){ // se o grupo terminou
-					finalizados++;
-				}
-			}
+		
+		if(!resultados){
+			System.out.println("Com "+quantidadeLivros+" livros "+finalizados+" grupos conseguiram entregar o trabalho em 200 unidades de tempo\n");
 		}
+		
+		System.out.println("== LIVROS MAIS LIDOS ==");
 		for(int i = 0; i< estante.numeroDeLivros(); i++) { //mostrando quantas vezes cada livro foi lido
 			try{
 				System.out.println("O livro "+i+" foi livro "+estante.pegarLivro(i).vezesQueFoiLido()+ " vezes");
