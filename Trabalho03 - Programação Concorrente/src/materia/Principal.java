@@ -38,7 +38,8 @@ public class Principal {
 			while(finalizados != 15){
 				finalizados = 0;
 				try{
-					Thread.sleep((tempoExtra++)*unidadeTempo);
+					Thread.sleep(1*unidadeTempo);
+					tempoExtra++;
 				}catch(InterruptedException e){
 					System.out.println("Ferrou joão 2");
 				}
