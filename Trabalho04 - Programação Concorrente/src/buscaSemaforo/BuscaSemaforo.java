@@ -5,46 +5,23 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import java.util.concurrent.Semaphore;
 
 public class BuscaSemaforo extends Thread{
+	private final int totalThreads = 12;
+	private final int threadsAutorizadas = 6;
+	private Task task = new Task();
 	private String nomeArquivo;
 	private File caminho;
+	private Thread[] threads = new Thread[this.totalThreads];
+	private Semaphore semaforo = new Semaphore(this.threadsAutorizadas);
+	
 
 	public BuscaSemaforo(String nome, String caminhoInicial) {
-		this.nomeArquivo = nome;
-		
-		try{
-			this.caminho = new File(caminhoInicial); //cria um arquivo com o caminho inicial dado
-		}catch(Exception e){
-			System.out.println("O caminho informado é inválido");
-		}
-
-	}
-	
-	public BuscaSemaforo(String nome, File caminho) {
-		this.nomeArquivo = nome;
-		this.caminho = caminho;
-	}
-	public void run() {
-		this.buscar(this.nomeArquivo, this.caminho);
-	}
-
-	public void buscar(String palavra, File arquivo) {  
-		try{ //tenta criar um arquivo com o caminho dado
-			
-			if (arquivo.isDirectory()) {  //vê se a string passada é um diretório
-				File[] subPastas = arquivo.listFiles();  //cria um array de subpastas
-				for (int i = 0; i < subPastas.length; i++) {  
-					BuscaSemaforo nova = new BuscaSemaforo(palavra, subPastas[i]);  
-					nova.start();
-					if (arquivo.getName().equalsIgnoreCase(palavra)) System.out.println(this.getName()+" achou -->"+arquivo.getName()+"\n");  
-					else if (arquivo.getName().indexOf(palavra) > -1) System.out.println(this.getName()+" achou -->"+arquivo.getName()+"\n");  
-				}  
-			}  
-			else if (arquivo.getName().equalsIgnoreCase(palavra)) System.out.println(this.getName()+" achou -->"+arquivo.getName()+"\n");  
-			else if (arquivo.getName().indexOf(palavra) > -1) System.out.println(this.getName()+" achou -->"+arquivo.getName()+"\n");  
-		}catch (Exception e) {
-			System.out.println("O caminho informado é inválido");
+		this.task.adicionarCaminho(caminhoInicial);
+		for(int i = 0; i < this.totalThreads ; i++) {
+			this.threads[i] = new Procurador(this.task, nome, this.semaforo);
+			this.threads[i].start();
 		}
 	}  
 }
