@@ -9,11 +9,13 @@ public class Procurador extends Thread {
 	private String procura;
 	private String encontrado;
 	private String caminhoDoEncontrado;
+	private long tamanho;
 	
-	public Procurador (Task task, String procura, Semaphore semaforo) {
+	public Procurador (Task task, String procura, Semaphore semaforo, long tamanho) {
 		this.task = task;
 		this.procura = procura;
 		this.semaforo = semaforo;
+		this.tamanho = tamanho;
 	}
 	
 	public void run () {
@@ -29,13 +31,12 @@ public class Procurador extends Thread {
 				File arquivo = new File(caminho);
 				this.procurar(this.procura, arquivo);
 				if(this.encontrado!= null){
-					System.out.println("ACHEI-------"+this.encontrado+"\n"+" NOOOOOOOOOO : "+ this.caminhoDoEncontrado);
+					System.out.println("Achei----> "+this.encontrado);
 					this.encontrado = null;
 				}
 				
 			}
 		}
-		System.out.println(this.getName()+" MORRI");
 	}
 	
 	public void procurar(String palavra, File arquivo) {  
@@ -45,21 +46,13 @@ public class Procurador extends Thread {
 				File[] subPastas = arquivo.listFiles();  //cria um array de subpastas
 				for (int i = 0; i < subPastas.length; i++) {  
 					this.task.adicionarCaminho(subPastas[i].getPath());
-					if (arquivo.getName().equalsIgnoreCase(palavra)){
-						this.encontrado = arquivo.getName();
-						this.caminhoDoEncontrado = arquivo.getAbsolutePath();
-					}
-					else if (arquivo.getName().indexOf(palavra) > -1){
-						this.encontrado = arquivo.getName();   
-						this.caminhoDoEncontrado = arquivo.getAbsolutePath();
-					}
 				}  
 			}  
-			else if (arquivo.getName().equalsIgnoreCase(palavra)){
+			else if (arquivo.getName().equalsIgnoreCase(palavra) || arquivo.getTotalSpace() <= this.tamanho){
 				this.encontrado = arquivo.getName();  
 				this.caminhoDoEncontrado = arquivo.getAbsolutePath();
 			}
-			else if (arquivo.getName().indexOf(palavra) > -1){
+			else if (arquivo.getName().indexOf(palavra) > -1 || arquivo.getTotalSpace() <= this.tamanho){
 				this.encontrado = arquivo.getName();  
 				this.caminhoDoEncontrado = arquivo.getAbsolutePath();
 			}

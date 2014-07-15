@@ -17,10 +17,10 @@ public class BuscaSemaforo extends Thread{
 	private Semaphore semaforo = new Semaphore(this.threadsAutorizadas);
 	
 
-	public BuscaSemaforo(String nome, String caminhoInicial) {
+	public BuscaSemaforo(String nome, String caminhoInicial, long tamanho) {
 		this.task.adicionarCaminho(caminhoInicial);
 		for(int i = 0; i < this.totalThreads ; i++) {
-			this.threads[i] = new Procurador(this.task, nome, this.semaforo);
+			this.threads[i] = new Procurador(this.task, nome, this.semaforo, tamanho);
 			this.threads[i].start();
 		}
 	}  
