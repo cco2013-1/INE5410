@@ -18,12 +18,19 @@ public class Procurador extends Thread {
 	
 	public void run () {
 		while(!this.task.taskVazia()){ 
-			String caminho = this.task.pegarCaminho();
+			String caminho = null;
+			try {
+				caminho = this.task.pegarCaminho();
+			}catch(Exception e){
+				
+			}
+			
 			if(caminho != null){
 				File arquivo = new File(caminho);
 				this.procurar(this.procura, arquivo);
 				if(this.encontrado!= null){
 					System.out.println("ACHEI-------"+this.encontrado+"\n"+" NOOOOOOOOOO : "+ this.caminhoDoEncontrado);
+					this.encontrado = null;
 				}
 				
 			}
